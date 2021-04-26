@@ -1,0 +1,16 @@
+<h1><%= tournaments[0].title %></h1>
+<br>
+<table>
+    <tr>
+        <% for (event in tournaments[0].headers){ %>
+            <th><%= tournaments[0].headers[event] %></th>
+            <% } %>
+    </tr>
+    <% for (score in tournaments[0].scores) { %>
+    <tr>
+        <% for (item in tournaments[0].scores[score]) { %>
+            <td><%= tournaments[0].scores[score][item] %></td>
+    <% } %>
+        </tr>
+        <% } %>
+</table>
