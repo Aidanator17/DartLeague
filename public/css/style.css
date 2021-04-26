@@ -1,0 +1,4 @@
+.navgrid {
+    display: grid;
+    grid-template-columns: .01fr auto;
+}
