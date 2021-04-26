@@ -101,4 +101,4 @@ const userModel = {
 //     }
 //     }
 //   };
-module.exports = userModel
+module.exports = {userModel, users}
