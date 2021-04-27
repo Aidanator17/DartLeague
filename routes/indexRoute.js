@@ -28,55 +28,95 @@ router.get("/tournaments", ensureAuthenticated, (req, res) => {
     res.render("tournaments", { tournaments, currentuser })
 })
 
-router.get("/t1", ensureAuthenticated, (req, res) => {
+router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
     let currentuser
     for (person in users) {
         if (req.user.id == users[person].id) {
             currentuser = users[person]
         }
     }
+    let reminderToFind = req.params.id;
+    let searchResult = tournaments.find(function (tourney) {
+      return tourney.id == reminderToFind;
+    });
+    console.log(searchResult)
 
-    res.render("single-tournament", { tournaments, currentuser })
+    res.render("single-tournament", { tournament:searchResult, currentuser, })
 })
 
-router.post("/addresult", ensureAuthenticated, (req, res) => {
+router.post("/addresult/:id", ensureAuthenticated, (req, res) => {
     let winner = req.body.winner
     let loser = req.body.loser
     let scorelist = req.body.score.split('-')
-    console.log(winner,loser)
-    for (aevent in tournaments[0].scores) {
-            if (tournaments[0].scores[aevent].name == winner) {
-                tournaments[0].scores[aevent].wins++
+    let currenttourney
+    for (tourney in tournaments){
+        if (req.params.id == tourney.id){
+            currenttourney = tournaments[tourney]
+        }
+    }
+    for (aevent in currenttourney.scores) {
+            if (currenttourney.scores[aevent].name == winner) {
+                currenttourney.scores[aevent].wins++
             }
-            if (tournaments[0].scores[aevent].name == loser) {
-                tournaments[0].scores[aevent].losses++
+            if (currenttourney.scores[aevent].name == loser) {
+                currenttourney.scores[aevent].losses++
             
         }
     }
-    tournaments[0].history.unshift({
+    currenttourney.history.unshift({
         first:winner,
         second:loser,
         firstscore:scorelist[0],
         secondscore:scorelist[1]
     })
 
-    res.redirect("/t1")
+    res.redirect("/tournaments/"+req.params.id)
 })
 
-router.get("/enroll", ensureAuthenticated, (req,res) => {
+router.get("/enroll/:id", ensureAuthenticated, (req,res) => {
     let currentuser
     for (person in users) {
         if (req.user.id == users[person].id) {
             currentuser = users[person]
         }
     }
-    tournaments[0].scores.push({
+    let currenttourney
+    for (tourney in tournaments){
+        if (req.params.id == tournaments[tourney].id){
+            currenttourney = tournaments[tourney]
+        }
+    }
+    currenttourney.scores.push({
         name:currentuser.name,
         wins:0,
         losses:0
     })
-    tournaments[0].enrolled.push(currentuser.id)
-    res.redirect("/t1")
+    currenttourney.enrolled.push(currentuser.id)
+    res.redirect("/tournaments/"+req.params.id)
+})
+
+router.get("/createtourney", ensureAuthenticated, (req,res) => {
+    res.render("createtourney")
+})
+
+router.post("/createtourney", ensureAuthenticated, (req,res) => {
+    let idindex = 0
+    for (i in tournaments){
+        if (tournaments[i].id > idindex){
+            idindex = tournaments[i].id
+        }
+    }
+    tournaments.push({
+        id:idindex+1,
+        title:req.body.title,
+        subtitle:req.body.subtitle,
+        headers:req.body.headers.split(','),
+        history:[],
+        enrolled:[],
+        scores:[]
+    })
+    console.log(tournaments)
+    res.redirect("/tournaments")
 })
 
 module.exports = router
