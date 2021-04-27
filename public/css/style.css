@@ -1,6 +1,6 @@
-.navgrid {
+.dividetourney {
     display: grid;
-    grid-template-columns: .01fr auto;
+    grid-template-columns: 1fr 1fr ;
 }
 td, th {
     border: 1px solid #dddddd;

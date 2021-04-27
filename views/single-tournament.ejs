@@ -1,23 +1,44 @@
-<h1><%= tournaments[0].title %></h1>
-<br>
-<table style="width: 750px;">
-    <tr>
-        <% for (event in tournaments[0].headers){ %>
-            <th><%= tournaments[0].headers[event] %></th>
-            <% } %>
-    </tr>
-    <% for (score in tournaments[0].scores) { %>
-    <tr>
-        <% for (item in tournaments[0].scores[score]) { %>
-            <td><%= tournaments[0].scores[score][item] %></td>
+<h1>
+    <%= tournaments[0].title %>
+</h1>
+<p><%= tournaments[0].subtitle %></p>
+<% let showbutton = true; for (person in tournaments[0].enrolled){ if (tournaments[0].enrolled[person] == currentuser.id){ showbutton=false }} if (showbutton==true){%>
+    <a href="/enroll" class="btn btn-info">Enroll</a><br>
     <% } %>
-        </tr>
-        <% } %>
-</table>
 <br>
-<h4>Add Result</h4>
-<form action="/addresult" method="POST">
-    <input placeholder="1st" name="winner">
-    <input placeholder="2nd" name="loser">
-    <button type="submit">Submit</button>
-</form>
+<div class='dividetourney'>
+    <div>
+        <table style="width: 400px;">
+            <tr>
+                <% for (event in tournaments[0].headers){ %>
+                    <th>
+                        <%= tournaments[0].headers[event] %>
+                    </th>
+                    <% } %>
+            </tr>
+            <% for (score in tournaments[0].scores) { %>
+                <tr>
+                    <% for (item in tournaments[0].scores[score]) { %>
+                        <td>
+                            <%= tournaments[0].scores[score][item] %>
+                        </td>
+                        <% } %>
+                </tr>
+                <% } %>
+        </table>
+        <br>
+        <h4>Add Result</h4>
+        <form action="/addresult" method="POST">
+            <input placeholder="1st" name="winner">
+            <input placeholder="2nd" name="loser">
+            <input placeholder="Score ex. '74-62'" name="score">
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div>
+        <h3>Match History</h3>
+        <% for (i in tournaments[0].history) { %>
+            <p><%= tournaments[0].history[i].first %> defeated <%= tournaments[0].history[i].second %> <%= tournaments[0].history[i].firstscore %> to <%= tournaments[0].history[i].secondscore %>!</p>
+            <% } %>
+    </div>
+</div>

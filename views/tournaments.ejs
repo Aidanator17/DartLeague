@@ -1,5 +1,8 @@
 <h1>Tournaments</h1>
 <p>Drinking and gambling without leaving your house. The perfect sport.</p>
+<% if (currentuser.role == 'admin'){ %>
+    <a href="/createtourney" class="btn btn-info">Create Tournament</a><br><br>
+    <% } %>
 <% for (i in tournaments){ %>
     <a href="/t1"><%= tournaments[i].title %></a>
     <% } %>

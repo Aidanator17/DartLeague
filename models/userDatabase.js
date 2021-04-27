@@ -3,9 +3,17 @@ let users = [
         id: 1,
         name: "Aidan Christopher",
         email: "aidan.r.christopher@gmail.com",
-        password: "A1dan123",
+        password: "A1dan123!",
         method: "local",
         role: "admin",
+        imageURL: "",
+    },{
+        id: 2,
+        name: "Rob Christopher",
+        email: "roblizaidan@gmail.com",
+        password: "A1dan123",
+        method: "local",
+        role: "user",
         imageURL: "",
     }]
 
