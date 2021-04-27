@@ -1,6 +1,6 @@
 <h1><%= tournaments[0].title %></h1>
 <br>
-<table>
+<table style="width: 750px;">
     <tr>
         <% for (event in tournaments[0].headers){ %>
             <th><%= tournaments[0].headers[event] %></th>
@@ -14,3 +14,10 @@
         </tr>
         <% } %>
 </table>
+<br>
+<h4>Add Result</h4>
+<form action="/addresult" method="POST">
+    <input placeholder="Winner" name="winner">
+    <input placeholder="Loser" name="loser">
+    <button type="submit">Submit</button>
+</form>
