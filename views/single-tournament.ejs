@@ -2,9 +2,15 @@
     <%= tournament.title %>
 </h1>
 <p><%= tournament.subtitle %></p>
-<% let showbutton = true; for (person in tournament.enrolled){ if (tournament.enrolled[person] == currentuser.id){ showbutton=false }} if (showbutton==true){%>
-    <a href=<%= "/enroll/"+tournament.id %> class="btn btn-info">Enroll</a><br>
-    <% } %>
+<% let showbutton = true; for (person in tournament.enrolled){ if (tournament.enrolled[person] == currentuser.id){ showbutton=false }} %> 
+    <% if (currentuser.role == "admin"){ if (tournament.active == false){ %>
+        <a href=<%= "/activate/"+tournament.id %> class="btn btn-info">Activate</a><br>
+        <% } if (tournament.active == true) {%>
+            <a href=<%= "/deactivate/"+tournament.id %> class="btn btn-info">Deactivate</a>
+            <% }} %>
+            <% if (showbutton==true){ if (tournament.active == true){ %>
+                <a href=<%= "/enroll/"+tournament.id %> class="btn btn-info">Enroll</a><br>
+                <% }} %>
 <br>
 <div class='dividetourney'>
     <div>
@@ -27,18 +33,20 @@
                 <% } %>
         </table>
         <br>
-        <h4>Add Result</h4>
+        <!-- <h4>Add Result</h4>
         <form action="/addresult" method="POST">
             <input placeholder="1st" name="winner">
             <input placeholder="2nd" name="loser">
             <input placeholder="Score ex. '74-62'" name="score">
             <button type="submit">Submit</button>
-        </form>
+        </form> -->
     </div>
     <div>
         <h3>Match History</h3>
         <% for (i in tournament.history) { %>
             <p><%= tournament.history[i].first %> defeated <%= tournament.history[i].second %> <%= tournament.history[i].firstscore %> to <%= tournament.history[i].secondscore %>!</p>
-            <% } %>
+            <% } if (tournament.history.length == 0){ %>
+                <p>No matches have been played yet</p>
+                <% } %>
     </div>
 </div>

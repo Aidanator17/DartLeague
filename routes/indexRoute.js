@@ -15,7 +15,7 @@ router.get("/home", ensureAuthenticated, (req, res) => {
             currentuser = users[person]
         }
     }
-    res.render("home", { currentuser })
+    res.render("home", { currentuser, tournaments })
 })
 
 router.get("/tournaments", ensureAuthenticated, (req, res) => {
@@ -92,6 +92,7 @@ router.get("/enroll/:id", ensureAuthenticated, (req,res) => {
         losses:0
     })
     currenttourney.enrolled.push(currentuser.id)
+    currentuser.enrolledin.push(currenttourney.id)
     res.redirect("/tournaments/"+req.params.id)
 })
 
@@ -108,6 +109,7 @@ router.post("/createtourney", ensureAuthenticated, (req,res) => {
     }
     tournaments.push({
         id:idindex+1,
+        active:false,
         title:req.body.title,
         subtitle:req.body.subtitle,
         headers:req.body.headers.split(','),
@@ -119,4 +121,27 @@ router.post("/createtourney", ensureAuthenticated, (req,res) => {
     res.redirect("/tournaments")
 })
 
+router.get("/activate/:id", ensureAuthenticated, (req,res) => {
+    let currenttourney
+    for (tourney in tournaments){
+        if (req.params.id == tournaments[tourney].id){
+            currenttourney = tournaments[tourney]
+        }
+    }
+    currenttourney.active = true
+
+    res.redirect("/tournaments/"+currenttourney.id)
+})
+
+router.get("/deactivate/:id", ensureAuthenticated, (req,res) => {
+    let currenttourney
+    for (tourney in tournaments){
+        if (req.params.id == tournaments[tourney].id){
+            currenttourney = tournaments[tourney]
+        }
+    }
+    currenttourney.active = false
+
+    res.redirect("/tournaments/"+currenttourney.id)
+})
 module.exports = router

@@ -6,6 +6,7 @@ let users = [
         password: "A1dan123!",
         method: "local",
         role: "admin",
+        enrolledin:[],
         imageURL: "",
     },{
         id: 2,
@@ -14,6 +15,7 @@ let users = [
         password: "A1dan123",
         method: "local",
         role: "user",
+        enrolledin:[],
         imageURL: "",
     }]
 
