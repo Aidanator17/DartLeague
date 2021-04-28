@@ -1,0 +1,37 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          String @id @default(uuid())
+  name        String
+  email       String @unique
+  password    String @unique
+  method      String
+  role        String
+  enrolledin  String[]
+  imageURL    String
+
+  @@map(name: "users")
+}
+
+model Tournament {
+  id        String @id @default(uuid())
+  active    Boolean
+  title     String
+  subtitle  String
+  headers   String[]
+  history   String[]
+  enrolled  String[]
+  scores    Json[]
+
+  @@map(name: "tournaments")
+}
