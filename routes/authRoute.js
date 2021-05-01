@@ -6,7 +6,7 @@ const userModel = require("../models/userDatabase").userModel
 const getUserByEmailIdAndPassword = require("../controllers/userController").getUserByEmailIdAndPassword
 
 router.get("/login", forwardAuthenticated, (req,res) => {
-    res.render("auth/login")
+    res.render("auth/login", {currentuser:{}})
 })
 
 router.post(
@@ -23,22 +23,21 @@ router.get("/logout", (req, res) => {
   });
 
 router.get("/register", forwardAuthenticated, (req,res) => {
-    res.render("auth/register")
+    res.render("auth/register", {currentuser:{}})
 })
 
 router.post("/register", (req,res) => {
-  console.log(req.body.name,req.body.email,req.body.password,req.body.passwordC)
   if (req.body.name == ""){
-    res.render("auth/error/register/name_empty", {fullname:req.body.name,email:req.body.email})
+    res.render("auth/error/register/name_empty", {fullname:req.body.name,email:req.body.email,currentuser:{}})
   }
   else if (req.body.email == ""){
-    res.render("auth/error/register/email_empty", {fullname:req.body.name,email:req.body.email})
+    res.render("auth/error/register/email_empty", {fullname:req.body.name,email:req.body.email,currentuser:{}})
   }
   else if (req.body.password == ""){
-    res.render("auth/error/register/pw_empty", {fullname:req.body.name,email:req.body.email})
+    res.render("auth/error/register/pw_empty", {fullname:req.body.name,email:req.body.email,currentuser:{}})
   }
   else if (!req.body.password == req.body.passwordC){
-    res.render("auth/error/register/confirm_pw", {fullname:req.body.name,email:req.body.email})
+    res.render("auth/error/register/confirm_pw", {fullname:req.body.name,email:req.body.email,currentuser:{}})
   }
   else {
     userModel.register_local(req.body.name,req.body.email,req.body.password)

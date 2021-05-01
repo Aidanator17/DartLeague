@@ -7,3 +7,13 @@ td, th {
     text-align: left;
     padding: 8px;
   }
+  .tournamenta:hover {
+    font-weight: bold;
+  }
+  .tournamenta:link {
+    text-decoration: none;
+  }
+  #dbgrid {
+      display: grid;
+      grid-template-columns: auto auto;
+  }

@@ -1,0 +1,36 @@
+<h1>The Vault</h1>
+<p>Where the secrets are kept.</p>
+<div id="dbgrid">
+    <div>
+        <h2>Users</h2><br>
+        <% for (i in users) { %>
+            <h4><%= users[i].name %></h4>
+            <p>ID: <%= users[i].id %><br>
+                Email: <%= users[i].email %><br>
+                Method: <%= users[i].method %><br>
+                Role: <%= users[i].role %><br>
+                Tournaments: <% for (a in users[i].enrolledin){ for (b in tournaments) { if
+                    (users[i].enrolledin[a]==tournaments[b].id){ %>
+                    <a style="color: black;" href="<%= "/tournaments/"+tournaments[b].id %>"><%= tournaments[b].title %></a>,
+                        <% }}} %>
+            </p>
+            <% } %>
+    </div>
+    <div>
+        <h2>Tournaments</h2><br>
+        <% for (i in tournaments){ %>
+            <h4>
+                <a style="color: black;" href="<%= "/tournaments/"+tournaments[i].id %>"><%= tournaments[i].title %></a>
+            </h4>
+            <p>ID: <%= tournaments[i].id %><br>
+                    Active Status: <%= tournaments[i].active %><br>
+                        Subtitle: "<%= tournaments[i].subtitle %>"<br>
+                            Players: <% for (a in tournaments[i].enrolled){ for (b in users) { if
+                                (tournaments[i].enrolled[a]==users[b].id){ %>
+                                <%= users[b].name %>,
+                                    <% }}} %>
+
+            </p>
+            <% } %>
+    </div>
+</div>

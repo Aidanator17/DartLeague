@@ -8,7 +8,7 @@
                 <% if (tournaments[tourney].id==currentuser.enrolledin[t]) { %>
                     <% if (tournaments[tourney].active==true){ %>
                         <li class="list-group-item">
-                            <a href=<%="/tournaments/" + tournaments[tourney].id %>><%= tournaments[tourney].title %>
+                            <a class="tournamenta" href=<%="/tournaments/" + tournaments[tourney].id %>><%= tournaments[tourney].title %>
                                     </a><br>
                         </li>
                         <% }}}}} %>
