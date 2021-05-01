@@ -40,7 +40,7 @@ const userModel = {
     if (user) {
       return user;
     }
-    throw new Error(`Couldn't find user with email: ${email}`);
+    return new Error(`Couldn't find user with email: ${email}`);
   },
   findById: (id) => {
     request(sites[1] + '/db/usersdb', function (error, response, body) {
@@ -85,16 +85,31 @@ const userModel = {
     })
 
     currentuser.enrolledin.push(t_id)
-    
+
     const update = await prisma.user.update({
       where: {
-          id: currentuser.id,
+        id: currentuser.id,
       },
       data: {
-          enrolledin: currentuser.enrolledin,
+        enrolledin: currentuser.enrolledin,
       },
-  })
+    })
 
+  },
+  register_local: async (u_name, u_email, u_password, imageURL='') => {
+    let name = u_name
+    let email = u_email
+    let password = u_password
+    let method = 'local'
+    let role = 'user'
+    try {
+      const user = await prisma.user.create({
+        data: { name, email, password, method, role, method, imageURL }
+      });
+    } catch (err) {
+      console.log('ERROR CODE:', err)
+
+    }
   }
 };
 module.exports = { userModel, database }

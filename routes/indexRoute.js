@@ -15,13 +15,25 @@ router.get("/", (req, res) => {
 })
 
 router.get("/home", ensureAuthenticated, (req, res) => {
-    let currentuser
-    for (person in users[0]) {
-        if (req.user.id == users[0][person].id) {
-            currentuser = users[0][person]
-        }
-    }
-    res.render("home", { currentuser, tournaments })
+    fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        tournaments[0] = JSON.parse(body)
+        fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
+            return res.text();
+        }).then(function (body) {
+            users[0] = JSON.parse(body)
+            let currentuser
+            for (person in users[0]) {
+                if (req.user.id == users[0][person].id) {
+                    currentuser = users[0][person]
+                }
+            }
+            let tournamentexport = tournaments[0]
+            res.render("home", { currentuser, tournaments:tournamentexport })
+        })
+
+    })
 })
 
 router.get("/tournaments", ensureAuthenticated, (req, res) => {

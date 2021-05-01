@@ -1,6 +1,14 @@
 <h1>Hi <%= currentuser.name %>!</h1>
-<% if (currentuser.enrolledin.length == 0) { %>
+<% if (currentuser.enrolledin.length==0) { %>
     <p>You're not enrolled in any tournaments! Visit the <a href="/tournaments">tournaments</a> page to get started.</p>
-    <% } else { for (tourney in tournaments){ for (t in currentuser.enrolledin) { if (tournaments[tourney].id == currentuser.enrolledin[t]) { if (tournaments[tourney].active == true){ %>
-        <a href=<%="/tournaments/" + tournaments[tourney].id %>><%= tournaments[tourney].title %></a><br>
-        <% }}}}} %>
+    <% } else { %>
+        <h4>Your tournaments:</h4>
+        <% for (tourney in tournaments){ %>
+            <% for (t in currentuser.enrolledin) { %>
+                <% if (tournaments[tourney].id==currentuser.enrolledin[t]) { %>
+                    <% if (tournaments[tourney].active==true){ %>
+                        <li class="list-group-item">
+                            <a href=<%="/tournaments/" + tournaments[tourney].id %>><%= tournaments[tourney].title %>
+                                    </a><br>
+                        </li>
+                        <% }}}}} %>

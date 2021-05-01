@@ -5,16 +5,6 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 let sitenum = 1
 
-let tournaments = [{
-    id: 1,
-    active: true,
-    title: "Christopher Open",
-    subtitle: "Starts May 21st",
-    headers: ['Name', 'Wins', 'Losses'],
-    history: [],
-    enrolled: [],
-    scores: []
-}]
 var database = []
 request(sites[1] + '/db/tourneydb', function (error, response, body) {
     database.push(JSON.parse(body))
