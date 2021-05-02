@@ -179,4 +179,13 @@ router.get("/deactivate/:id", ensureAuthenticated, (req, res) => {
     })
 
 })
+
+router.get("/bracketcreate", (req,res) => {
+    res.render("bracketcreate", {currentuser:{}})
+})
+
+router.post("/bracket", (req,res) => {
+    let x = req.body.binput.split(",")
+    res.render("bracket", {currentuser:{},names:x})
+})
 module.exports = router
