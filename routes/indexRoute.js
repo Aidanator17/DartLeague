@@ -30,7 +30,7 @@ router.get("/home", ensureAuthenticated, (req, res) => {
                 }
             }
             let tournamentexport = tournaments[0]
-            res.render("home", { currentuser, tournaments:tournamentexport })
+            res.render("home", { currentuser, tournaments: tournamentexport })
         })
 
     })
@@ -85,14 +85,14 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
 
 })
 
-router.get("/enroll/:id", ensureAuthenticated, (req, res) => {
+router.get("/enroll/:id", ensureAuthenticated, async (req, res) => {
     fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
         return res.text();
     }).then(function (body) {
         tournaments[0] = JSON.parse(body)
         fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
             return res.text();
-        }).then(function (body) {
+        }).then(async function (body) {
             users[0] = JSON.parse(body)
             let currentuser
             for (person in users[0]) {
@@ -100,11 +100,13 @@ router.get("/enroll/:id", ensureAuthenticated, (req, res) => {
                     currentuser = users[0][person]
                 }
             }
-
-            tourneyModel.enroll(req.params.id, currentuser)
-            userModel.enroll(req.params.id, currentuser)
-
-            res.redirect("/tournaments/" + req.params.id)
+            Promise.all([tourneyModel.enroll(req.params.id, currentuser), userModel.enroll(req.params.id, currentuser)]).then((values) => {
+                function red() {
+                    res.redirect("/tournaments/" + req.params.id)
+                }
+                setTimeout(red, 2000)
+            }
+            )
         })
     })
 
@@ -180,12 +182,12 @@ router.get("/deactivate/:id", ensureAuthenticated, (req, res) => {
 
 })
 
-router.get("/bracketcreate", (req,res) => {
-    res.render("bracketcreate", {currentuser:{}})
+router.get("/bracketcreate", (req, res) => {
+    res.render("bracketcreate", { currentuser: {} })
 })
 
-router.post("/bracket", (req,res) => {
+router.post("/bracket", (req, res) => {
     let x = req.body.binput.split(",")
-    res.render("bracket", {currentuser:{},names:x})
+    res.render("bracket", { currentuser: {}, names: x })
 })
 module.exports = router
