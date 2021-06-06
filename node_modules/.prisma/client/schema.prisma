@@ -19,6 +19,7 @@ model User {
   role        String
   enrolledin  String[]
   imageURL    String
+  verified    Boolean
 
   @@map(name: "users")
 }
