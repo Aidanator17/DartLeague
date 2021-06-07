@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^2.21.2",
+    "@prisma/client": "^2.24.1",
     "@sendgrid/mail": "^7.4.4",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
@@ -26,6 +26,6 @@
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "prisma": "^2.21.2"
+    "prisma": "^2.24.1"
   }
 }
