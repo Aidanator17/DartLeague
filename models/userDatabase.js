@@ -102,9 +102,10 @@ const userModel = {
     let password = u_password
     let method = 'local'
     let role = 'user'
+    let verified = false
     try {
       const user = await prisma.user.create({
-        data: { name, email, password, method, role, method, imageURL }
+        data: { name, email, password, method, role, method, imageURL, verified }
       });
     } catch (err) {
       console.log('ERROR CODE:', err)
