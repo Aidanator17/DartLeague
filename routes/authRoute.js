@@ -4,6 +4,10 @@ const { forwardAuthenticated } = require("../middleware/checkAuth");
 const router = express.Router(); 
 const userModel = require("../models/userDatabase").userModel
 const getUserByEmailIdAndPassword = require("../controllers/userController").getUserByEmailIdAndPassword
+const sgMail = require('@sendgrid/mail')
+var config = require("../config")
+sgMail.setApiKey(config.SENDGRID_API_KEY)
+const sendMail = require("../controllers/mailController").sendMail
 
 router.get("/login", forwardAuthenticated, (req,res) => {
     res.render("auth/login", {currentuser:{}})
@@ -26,7 +30,7 @@ router.get("/register", forwardAuthenticated, (req,res) => {
     res.render("auth/register", {currentuser:{}})
 })
 
-router.post("/register", (req,res) => {
+router.post("/register", async (req,res) => {
   if (req.body.name == ""){
     res.render("auth/error/register/name_empty", {fullname:req.body.name,email:req.body.email,currentuser:{}})
   }
@@ -41,14 +45,10 @@ router.post("/register", (req,res) => {
   }
   else {
     userModel.register_local(req.body.name,req.body.email,req.body.password)
+    await sendMail(req.body.email, 'https://www.youtube.com/watch?v=dQw4w9WgXcQ')
     res.render("auth/verify", {currentuser:{}, email:req.body.email})
   }
 
-})
-
-router.get("/v", (req, res)=>{
-  let currentuser = {}
-  currentuser['role'] = 'admin'
 })
 
 module.exports = router
