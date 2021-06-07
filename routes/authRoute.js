@@ -41,9 +41,14 @@ router.post("/register", (req,res) => {
   }
   else {
     userModel.register_local(req.body.name,req.body.email,req.body.password)
-    res.redirect("/auth/login")
+    res.render("auth/verify", {currentuser:{}, email:req.body.email})
   }
 
+})
+
+router.get("/v", (req, res)=>{
+  let currentuser = {}
+  currentuser['role'] = 'admin'
 })
 
 module.exports = router
