@@ -103,14 +103,16 @@ const userModel = {
     let method = 'local'
     let role = 'user'
     let verified = false
+    let value = true
     try {
       const user = await prisma.user.create({
         data: { name, email, password, method, role, method, imageURL, verified }
       });
     } catch (err) {
       console.log('ERROR CODE:', err)
-
+      value = false
     }
+    return value
   }
 };
 module.exports = { userModel, database }

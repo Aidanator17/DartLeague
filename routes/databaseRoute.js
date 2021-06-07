@@ -22,7 +22,8 @@ router.get("/usersdb", async (req, res) => {
         method: true,
         role: true,
         enrolledin: true,
-        imageURL: true
+        imageURL: true,
+        verified: true,
       }
     })
     return res.json(users)
