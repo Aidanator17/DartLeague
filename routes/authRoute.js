@@ -66,6 +66,7 @@ router.post("/register", async (req, res) => {
     let uu = uuidv4();
     let cont = await userModel.register_local(uu, req.body.name, req.body.email, req.body.password)
     if (cont) {
+      console.log('pog!')
       await sendMail(req.body.email, 'https://robsonlinedarts.herokuapp.com/verify/id/'+uu, req.body.name)
       res.render("auth/verify", { currentuser: {}, email: req.body.email })
     }
