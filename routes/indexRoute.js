@@ -5,7 +5,6 @@ let users = require("../models/userDatabase").database
 let tournaments = require("../models/tourneyDatabase").database
 let userModel = require("../models/userDatabase").userModel
 let tourneyModel = require("../models/tourneyDatabase").tourneyModel
-const request = require('request');
 const fetch = require('node-fetch');
 let sites = ['https://robsonlinedarts.herokuapp.com', 'http://localhost:8000']
 let sitenum = 1

@@ -8,6 +8,7 @@ const sgMail = require('@sendgrid/mail')
 var config = require("../config")
 sgMail.setApiKey(config.SENDGRID_API_KEY)
 const sendMail = require("../controllers/mailController").sendMail
+const { v4: uuidv4 } = require('uuid');
 
 router.get("/login", forwardAuthenticated, (req, res) => {
   res.render("auth/login", { currentuser: {} })
@@ -23,7 +24,7 @@ router.post("/login", (req, res) => {
 
     else if (user.verified == false) {
       console.log("NOT VERIFIED",user); 
-      sendMail(user.email, 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', user.name)
+      sendMail(user.email, 'https://robsonlinedarts.herokuapp.com/verify/id/'+user.id, user.name)
       res.render("auth/verify", { currentuser: {}, email: user.email })
       req.logOut()
     }
@@ -58,13 +59,14 @@ router.post("/register", async (req, res) => {
   else if (req.body.password == "") {
     res.render("auth/error/register/pw_empty", { fullname: req.body.name, email: req.body.email, currentuser: {} })
   }
-  else if (!req.body.password == req.body.passwordC) {
+  else if (req.body.password !== req.body.passwordC) {
     res.render("auth/error/register/confirm_pw", { fullname: req.body.name, email: req.body.email, currentuser: {} })
   }
   else {
-    let cont = await userModel.register_local(req.body.name, req.body.email, req.body.password)
+    let uu = uuidv4();
+    let cont = await userModel.register_local(uu, req.body.name, req.body.email, req.body.password)
     if (cont) {
-      await sendMail(req.body.email, 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', req.body.name)
+      await sendMail(req.body.email, 'https://robsonlinedarts.herokuapp.com/verify/id/'+uu, req.body.name)
       res.render("auth/verify", { currentuser: {}, email: req.body.email })
     }
     else {

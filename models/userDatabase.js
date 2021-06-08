@@ -96,7 +96,7 @@ const userModel = {
     })
 
   },
-  register_local: async (u_name, u_email, u_password, imageURL='') => {
+  register_local: async (u_id, u_name, u_email, u_password, imageURL='') => {
     let name = u_name
     let email = u_email
     let password = u_password
@@ -104,15 +104,26 @@ const userModel = {
     let role = 'user'
     let verified = false
     let value = true
+    let id = u_id
     try {
       const user = await prisma.user.create({
-        data: { name, email, password, method, role, method, imageURL, verified }
+        data: { id, name, email, password, method, role, method, imageURL, verified }
       });
     } catch (err) {
       console.log('ERROR CODE:', err)
       value = false
     }
     return value
+  },
+  verify: async (lookupID) => {
+    const updateUser = await prisma.user.update({
+      where: {
+        id: lookupID,
+      },
+      data: {
+        verified: true,
+      },
+    })
   }
 };
 module.exports = { userModel, database }

@@ -25,6 +25,7 @@ const passport = require("./middleware/passport");
 const authRoute = require("./routes/authRoute");
 const indexRoute = require("./routes/indexRoute");
 const dbRoute = require("./routes/databaseRoute");
+const verifyRoute = require("./routes/verifyRoute");
 
 // Middleware for express
 app.use(express.json());
@@ -48,6 +49,7 @@ app.use(passport.session());
 app.use("/", indexRoute);
 app.use("/auth", authRoute);
 app.use("/db", dbRoute);
+app.use("/verify", verifyRoute)
 
 
 app.listen(port, () => {

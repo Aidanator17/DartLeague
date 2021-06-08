@@ -13,7 +13,7 @@ function sendMail(email, link, name) {
     sgMail
         .send(msg)
         .then(() => {
-            console.log('Email sent')
+            console.log('Email sent to '+email)
         })
         .catch((error) => {
             // console.error(error)
