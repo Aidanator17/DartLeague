@@ -6,13 +6,13 @@ let tournaments = require("../models/tourneyDatabase").database
 let userModel = require("../models/userDatabase").userModel
 let tourneyModel = require("../models/tourneyDatabase").tourneyModel
 const fetch = require('node-fetch');
-const {v4:uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const challonge = require('challonge');
 let sites = ['https://robsonlinedarts.herokuapp.com', 'http://localhost:8000']
 let sitenum = 1
 const client = challonge.createClient({
     apiKey: 'Sks8NJLfTCQAO1c47e6Y4Mbh0Gj1bqHzpiCx1QoZ'
-  });
+});
 
 router.get("/", (req, res) => {
     res.redirect("/home")
@@ -84,7 +84,26 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                 return tourney.id == reminderToFind;
             });
 
-            res.render("single-tournament", { tournament: searchResult, currentuser, })
+            let x
+            for (tourney in tournaments[0]) {
+                if (tournaments[0][tourney].id == req.params.id) {
+                    x = tournaments[0][tourney]
+                    break
+                }
+            }
+
+            let width
+            let height
+            if (x.enrolled.length > 4) {
+                width = 1350
+                height = 670
+            }
+            else {
+                width = 1150
+                height = 620
+            }
+
+            res.render("single-tournament", { tournament: searchResult, currentuser, height, width})
         })
     })
 
@@ -105,7 +124,7 @@ router.get("/enroll/:id", ensureAuthenticated, async (req, res) => {
                     currentuser = users[0][person]
                 }
             }
-            
+
             let x
             for (tourney in tournaments[0]) {
                 if (tournaments[0][tourney].id == req.params.id) {
@@ -114,14 +133,16 @@ router.get("/enroll/:id", ensureAuthenticated, async (req, res) => {
             }
 
             client.participants.create({
-                id: x.url.replace('https://challonge.com/',''),
+                id: x.url.replace('https://challonge.com/', ''),
                 participant: {
-                  name: req.user.FName+' '+req.user.LName
+                    name: req.user.FName + ' ' + req.user.LName
                 },
                 callback: (err, data) => {
-                  console.log(err);
+                    console.log(err);
                 }
-              });
+            });
+
+
 
             Promise.all([tourneyModel.enroll(req.params.id, currentuser), userModel.enroll(req.params.id, currentuser)]).then((values) => {
                 function red() {
@@ -136,13 +157,13 @@ router.get("/enroll/:id", ensureAuthenticated, async (req, res) => {
 })
 
 router.get("/createtourney", ensureAuthenticated, (req, res) => {
-    res.render("createtourney", {currentuser:req.user})
+    res.render("createtourney", { currentuser: req.user })
 })
 
 router.post("/createtourney", ensureAuthenticated, async (req, res) => {
     let id = uuidv4();
-    let url = id.replace(/-/g,'_')
-    let fullurl = "https://challonge.com/"+url
+    let url = id.replace(/-/g, '_')
+    let fullurl = "https://challonge.com/" + url
     let title = req.body.title
     let subtitle = req.body.subtitle
     let active = false
@@ -150,18 +171,33 @@ router.post("/createtourney", ensureAuthenticated, async (req, res) => {
     let history = []
     let enrolled = []
 
-    await tourneyModel.create(id,fullurl,title,subtitle,active,type,history,enrolled)
+    await tourneyModel.create(id, fullurl, title, subtitle, active, type, history, enrolled)
 
-    client.tournaments.create({
-        tournament: {
-          name: title,
-          url: url,
-          tournamentType: type,
-        },
-        callback: (err, data) => {
-        //   console.log(err, data);
-        }
-      });
+    if (req.body.type == 'double elimination') {
+        client.tournaments.create({
+            tournament: {
+                name: title,
+                url: url,
+                tournamentType: type,
+                grand_finals_modifier: 'single match',
+            },
+            callback: (err, data) => {
+                //   console.log(err, data);
+            }
+        });
+    }
+    else {
+        client.tournaments.create({
+            tournament: {
+                name: title,
+                url: url,
+                tournamentType: type,
+            },
+            callback: (err, data) => {
+                //   console.log(err, data);
+            }
+        });
+    }
 
     res.redirect("/tournaments")
 })
