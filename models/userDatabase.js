@@ -96,8 +96,9 @@ const userModel = {
     })
 
   },
-  register_local: async (u_id, u_name, u_email, u_password, imageURL='') => {
-    let name = u_name
+  register_local: async (u_id, u_fname, u_lname, u_email, u_password, imageURL='') => {
+    let FName = u_fname
+    let LName = u_lname
     let email = u_email
     let password = u_password
     let method = 'local'
@@ -107,7 +108,7 @@ const userModel = {
     let id = u_id
     try {
       const user = await prisma.user.create({
-        data: { id, name, email, password, method, role, method, imageURL, verified }
+        data: { id, FName, LName, email, password, method, role, method, imageURL, verified }
       });
     } catch (err) {
       console.log('ERROR CODE:', err)

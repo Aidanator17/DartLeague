@@ -6,10 +6,16 @@
         </h1>
         <h2>Register</h2>
         <form action="/auth/register" method="POST">
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="name" id="name" name="name" class="form-control" placeholder="Enter Full Name" value="<%= fullname %>"/>
-        </div>
+          <div class="form-row">
+            <div class="col">
+              <label for="fname">First Name</label>
+              <input type="name" id="fname" name="fname" class="form-control" placeholder="Enter First Name" value="<%= fname %>" />
+            </div>
+            <div class="col">
+              <label for="lname">Last Name</label>
+              <input type="name" id="lname" name="lname" class="form-control" placeholder="Enter Last Name" value="<%= lname %>" />
+            </div>
+          </div>
         <div class="form-group">
             <label for="email">Email</label>
             <p style="color: red;">Cannot leave fields empty</p>

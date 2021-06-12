@@ -44,23 +44,26 @@ const tourneyModel = {
                 }
             }
             x.enrolled.push(currentuser.id)
-            x.scores.push({
-                name: currentuser.name,
-                wins: 0,
-                losses: 0
-            })
             console.log(x)
             const update = await prisma.tournament.update({
                 where: {
                     id: t_id,
                 },
                 data: {
-                    enrolled: x.enrolled,
-                    scores: x.scores
+                    enrolled: x.enrolled
                 },
             })
         })
     },
+    create: async (id,url,title,subtitle,active,type,history,enrolled) => {
+        try {
+            const tournament = await prisma.tournament.create({
+                data: { id,url,active,title,subtitle,type,history,enrolled }
+            });
+        } catch (err) {
+            console.log('ERROR CODE:', err)
+        }
+    }
 }
 
 module.exports = { database, tourneyModel }

@@ -16,7 +16,8 @@ router.get("/usersdb", async (req, res) => {
     const users = await prisma.user.findMany({
       select: {
         id: true,
-        name: true,
+        FName: true,
+        LName: true,
         email: true,
         password: true,
         method: true,
@@ -34,18 +35,7 @@ router.get("/usersdb", async (req, res) => {
 
 router.get("/tourneydb", async (req, res) => {
   try {
-    const users = await prisma.tournament.findMany({
-      select: {
-        id: true,
-        active: true,
-        title: true,
-        subtitle: true,
-        headers: true,
-        history: true,
-        enrolled: true,
-        scores: true
-      }
-    })
+    const users = await prisma.tournament.findMany()
     return res.json(users)
   } catch (err) {
     return res.status(500).json({ error: "Something went wrong" + err })

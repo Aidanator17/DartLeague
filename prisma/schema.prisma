@@ -12,7 +12,8 @@ generator client {
 
 model User {
   id          String @id @default(uuid())
-  name        String
+  FName       String
+  LName       String
   email       String @unique
   password    String @unique
   method      String
@@ -26,13 +27,13 @@ model User {
 
 model Tournament {
   id        String @id @default(uuid())
+  url       String
   active    Boolean
   title     String
   subtitle  String
-  headers   String[]
+  type      String
   history   String[]
   enrolled  String[]
-  scores    Json[]
 
   @@map(name: "tournaments")
 }

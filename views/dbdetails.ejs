@@ -27,7 +27,7 @@
                         Subtitle: "<%= tournaments[i].subtitle %>"<br>
                             Players: <% for (a in tournaments[i].enrolled){ for (b in users) { if
                                 (tournaments[i].enrolled[a]==users[b].id){ %>
-                                <%= users[b].name %>,
+                                <%= users[b].FName %> <%= users[b].LName %>,
                                     <% }}} %>
 
             </p>

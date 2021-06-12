@@ -9,8 +9,11 @@
         <input type="text" class="form-control" placeholder="Subtitle" name="subtitle">
       </div>
       <div class="form-group">
-        <label for="headers">Headers</label>
-        <input type="text" class="form-control" placeholder="Headers, separate by ',' no space" name="headers">
+        <label for="headers">Type</label>
+        <select class="form-control" aria-label="Default select example" name="type">
+          <option value="double elimination">Double Elimination</option>
+          <option value="single elimination">Single Elimination</option>
+        </select>
       </div>
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
