@@ -23,6 +23,7 @@
                 <a style="color: black;" href="<%= "/tournaments/"+tournaments[i].id %>"><%= tournaments[i].title %></a>
             </h4>
             <p>ID: <%= tournaments[i].id %><br>
+                URL: <a href="<%= tournaments[i].url %>"><%= tournaments[i].url %></a><br>
                     Active Status: <%= tournaments[i].active %><br>
                         Subtitle: "<%= tournaments[i].subtitle %>"<br>
                             Players: <% for (a in tournaments[i].enrolled){ for (b in users) { if
