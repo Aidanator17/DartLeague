@@ -31,6 +31,26 @@ const tourneyModel = {
             },
         })
     },
+    archive: async (t_id) => {
+        const update = await prisma.tournament.update({
+            where: {
+                id: t_id,
+            },
+            data: {
+                archived: true,
+            },
+        })
+    },
+    unarchive: async (t_id) => {
+        const update = await prisma.tournament.update({
+            where: {
+                id: t_id,
+            },
+            data: {
+                archived: false,
+            },
+        })
+    },
     enroll: async (t_id, currentuser) => {
         var database = []
         fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
@@ -55,10 +75,10 @@ const tourneyModel = {
             })
         })
     },
-    create: async (id,url,title,subtitle,active,type,history,enrolled) => {
+    create: async (id,url,title,subtitle,active,archived,type,history,enrolled) => {
         try {
             const tournament = await prisma.tournament.create({
-                data: { id,url,active,title,subtitle,type,history,enrolled }
+                data: { id,url,active,archived,title,subtitle,type,history,enrolled }
             });
         } catch (err) {
             console.log('ERROR CODE:', err)

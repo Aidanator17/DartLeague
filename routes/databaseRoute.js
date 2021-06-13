@@ -13,20 +13,7 @@ let sitenum = 1
 router.get("/usersdb", async (req, res) => {
 
   try {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        FName: true,
-        LName: true,
-        email: true,
-        password: true,
-        method: true,
-        role: true,
-        enrolledin: true,
-        imageURL: true,
-        verified: true,
-      }
-    })
+    const users = await prisma.user.findMany()
     return res.json(users)
   } catch (err) {
     return res.status(500).json({ error: "Something went wrong" })

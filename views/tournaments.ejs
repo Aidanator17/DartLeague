@@ -3,15 +3,21 @@
 <% if (currentuser.role=='admin' ){ %>
     <a href="/createtourney" class="btn btn-info">Create Tournament</a><br><br>
     <% } %>
+    <h4>Active Tournaments:</h4>
         <% for (i in tournaments){ %>
-            <% if (tournaments[i].active==true){ %>
-                <a href=<%="/tournaments/" + tournaments[i].id %>><%= tournaments[i].title %></a><br>
-                <% }} %>
+            <% if (tournaments[i].archived==false){ if (tournaments[i].active==true){ %>
+                <h5><a href=<%="/tournaments/" + tournaments[i].id %>><%= tournaments[i].title %></a></h5>
+                <% }}} %>
 
                     <% if (currentuser.role=="admin" ) { %>
                         <br>
                         <p>Not active:</p>
                         <% for (i in tournaments){ %>
-                            <% if (tournaments[i].active==false){ %>
+                            <% if (tournaments[i].archived==false){ if (tournaments[i].active==false){ %>
                                 <a href=<%="/tournaments/" + tournaments[i].id %>><%= tournaments[i].title %></a><br>
-                                <% }}} %>
+                                <% }}}} %>
+    <br><h4>Finished Tournaments:</h4>
+    <% for (i in tournaments){ %>
+        <% if (tournaments[i].archived==true){ %>
+            <h5><a href=<%="/tournaments/" + tournaments[i].id %>><%= tournaments[i].title %></a></h5><br>
+            <% }} %>

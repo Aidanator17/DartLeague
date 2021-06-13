@@ -29,6 +29,7 @@ model Tournament {
   id        String @id @default(uuid())
   url       String
   active    Boolean
+  archived  Boolean
   title     String
   subtitle  String
   type      String

@@ -167,11 +167,12 @@ router.post("/createtourney", ensureAuthenticated, async (req, res) => {
     let title = req.body.title
     let subtitle = req.body.subtitle
     let active = false
+    let archived = false
     let type = req.body.type
     let history = []
     let enrolled = []
 
-    await tourneyModel.create(id, fullurl, title, subtitle, active, type, history, enrolled)
+    await tourneyModel.create(id, fullurl, title, subtitle, active, archived, type, history, enrolled)
 
     if (req.body.type == 'double elimination') {
         client.tournaments.create({
@@ -248,12 +249,58 @@ router.get("/deactivate/:id", ensureAuthenticated, (req, res) => {
 
 })
 
-router.get("/bracketcreate", (req, res) => {
-    res.render("bracketcreate", { currentuser: {} })
+router.get("/archive/:id", ensureAuthenticated, (req, res) => {
+    fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        tournaments[0] = JSON.parse(body)
+        fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
+            return res.text();
+        }).then(function (body) {
+            users[0] = JSON.parse(body)
+            let currenttourney
+            for (tourney in tournaments[0]) {
+                if (req.params.id == tournaments[0][tourney].id) {
+                    currenttourney = tournaments[0][tourney]
+                }
+            }
+            tourneyModel.archive(req.params.id)
+
+            res.redirect("/tournaments/" + req.params.id)
+        })
+    })
+
 })
 
-router.post("/bracket", (req, res) => {
-    let x = req.body.binput.split(",")
-    res.render("bracket", { currentuser: {}, names: x })
+router.get("/unarchive/:id", ensureAuthenticated, (req, res) => {
+    fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        tournaments[0] = JSON.parse(body)
+        fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
+            return res.text();
+        }).then(function (body) {
+            users[0] = JSON.parse(body)
+            let currenttourney
+            for (tourney in tournaments[0]) {
+                if (req.params.id == tournaments[0][tourney].id) {
+                    currenttourney = tournaments[0][tourney]
+                }
+            }
+            tourneyModel.unarchive(req.params.id)
+
+            res.redirect("/tournaments/" + req.params.id)
+        })
+    })
+
 })
+
+// router.get("/bracketcreate", (req, res) => {
+//     res.render("bracketcreate", { currentuser: {} })
+// })
+
+// router.post("/bracket", (req, res) => {
+//     let x = req.body.binput.split(",")
+//     res.render("bracket", { currentuser: {}, names: x })
+// })
 module.exports = router
