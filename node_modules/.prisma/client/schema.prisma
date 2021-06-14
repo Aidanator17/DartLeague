@@ -30,9 +30,11 @@ model Tournament {
   url       String
   active    Boolean
   archived  Boolean
+  started   Boolean
   title     String
   subtitle  String
   type      String
+  matches   Json
   history   String[]
   enrolled  String[]
 

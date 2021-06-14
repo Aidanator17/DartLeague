@@ -56,7 +56,7 @@ router.get("/tournaments", ensureAuthenticated, (req, res) => {
                 }
             }
             let tournamentexport = tournaments[0]
-            console.log(tournamentexport)
+            // console.log(tournamentexport)
             res.render("tournaments", { tournaments: tournamentexport, currentuser })
         })
 
@@ -92,6 +92,14 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                 }
             }
 
+            let showfinish = true
+            for (i in x.matches) {
+                if (x.matches[i].winnerid == null) {
+                    showfinish = false
+                    break
+                }
+            }
+
             let width
             let height
             if (x.enrolled.length > 4) {
@@ -102,8 +110,8 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                 width = 1150
                 height = 620
             }
-
-            res.render("single-tournament", { tournament: searchResult, currentuser, height, width})
+            tourneyModel.updateMatches(x.id)
+            res.render("single-tournament", { tournament: searchResult, currentuser, height, width, showfinish })
         })
     })
 
@@ -295,12 +303,89 @@ router.get("/unarchive/:id", ensureAuthenticated, (req, res) => {
 
 })
 
-// router.get("/bracketcreate", (req, res) => {
-//     res.render("bracketcreate", { currentuser: {} })
-// })
+router.get("/addresult/:id", ensureAuthenticated, async (req, res) => {
+    await fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        tournaments[0] = JSON.parse(body)
+    })
 
-// router.post("/bracket", (req, res) => {
-//     let x = req.body.binput.split(",")
-//     res.render("bracket", { currentuser: {}, names: x })
-// })
+    let ctourney
+    for (tourney in tournaments[0]) {
+        if (tournaments[0][tourney].id == req.params.id) {
+            ctourney = tournaments[0][tourney]
+            break
+        }
+    }
+    // console.log(tournaments[0])
+    res.render("addresult", { currentuser: req.user, tournament: ctourney })
+})
+
+router.post("/addresult/:id", ensureAuthenticated, async (req, res) => {
+    await fetch(sites[sitenum] + '/db/tourneydb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        tournaments[0] = JSON.parse(body)
+    })
+
+
+    if (parseInt(req.body.p2score) == parseInt(req.body.p1score)) {
+        res.redirect('/tournaments/' + req.params.id)
+    }
+    else {
+        let ctourney
+        for (tourney in tournaments[0]) {
+            if (tournaments[0][tourney].id == req.params.id) {
+                ctourney = tournaments[0][tourney]
+                break
+            }
+        }
+
+        let cmatch
+        for (i in ctourney.matches) {
+            if (ctourney.matches[i].winnerid == null) {
+                if (ctourney.matches[i].title == req.body.title) {
+                    cmatch = ctourney.matches[i]
+                    break
+                }
+            }
+        }
+
+        let winnerscore = {}
+        let loserscore
+        if (parseInt(req.body.p1score) > parseInt(req.body.p2score)) {
+            winnerscore['id'] = cmatch.player1id
+            winnerscore['score'] = req.body.p1score
+            loserscore = req.body.p2score
+        }
+        else if (parseInt(req.body.p2score) > parseInt(req.body.p1score)) {
+            winnerscore['id'] = cmatch.player2id
+            winnerscore['score'] = req.body.p2score
+            loserscore = req.body.p1score
+        }
+
+
+
+
+        client.matches.update({
+            id: ctourney.url.replace('https://challonge.com/', ''),
+            matchId: cmatch.matchid,
+            match: {
+                scoresCsv: req.body.p1score + '-' + req.body.p2score,
+                winnerId: winnerscore.id
+            },
+            callback: (err, data) => {
+                // console.log(err, data);
+            }
+        });
+
+        res.redirect('/tournaments/' + req.params.id)
+    }
+})
+
+router.get('/finish/:id', async (req,res) => {
+    tourneyModel.finish(req.params.id)
+    res.redirect('/tournaments/' + req.params.id)
+})
+
 module.exports = router

@@ -13,7 +13,12 @@
             <% let enr=false; for (i in tournament.enrolled) { if (tournament.enrolled[i]==currentuser.id){ enr=true } }
                 if (enr==true){ %><br>
                 <% } %>
-                    <% }} %>
+                    <% } if (showfinish){ %> 
+                        <a href='<%= "/finish/"+tournament.id %>' class="btn btn-info">Finish</a>
+                        <% } } %>
+                    <% if (showbutton==false && tournament.started == true){ %>
+                        <a href='<%= "/addresult/"+tournament.id %>' class="btn btn-info">Add Result</a>
+                        <% } %>
                         <% if (tournament.archived==false){ if (showbutton==true){ if (tournament.active==true){ %>
                             <a href='<%= "/enroll/"+tournament.id %>' class="btn btn-info">Enroll</a>
                             <% }}} if (currentuser.role=="admin" ){ if (tournament.archived==false){ %>
