@@ -1,0 +1,63 @@
+<h1>
+    Add Result
+</h1>
+<h4>
+    <%= tournament.title %>
+</h4>
+<form action="<%= '/addresult/'+tournament.id %>" method="POST">
+    <label for="title">Match:</label>
+    <select onchange="changeName()" class="form-control" aria-label="Default select example" name="title" id="sel">
+        <option value="0">Select match...</option>
+        <% for (i in tournament.matches){ if (tournament.matches[i].winnerid==null && tournament.matches[i].player1id
+            !=null && tournament.matches[i].player2id !=null) {%>
+            <option value="<%= tournament.matches[i].title %>">
+                <%= tournament.matches[i].title %>
+            </option>
+            <% }} %>
+    </select>
+    <div id='scores' style="display: none;">
+        <label for="score">Score:</label>
+        <div class='scoregrid'>
+            <div>
+                <span id='p1'></span>
+            </div>
+            <div class="col">
+                <input name="p1score" type="text" class="form-control" placeholder="Ex. '3'">
+            </div>
+            <div>
+                <span id='p2'></span>
+            </div>
+            <div class="col">
+                <input name="p2score" type="text" class="form-control" placeholder="Ex. '2'">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+</form>
+<script>
+    function changeName() {
+        x = document.getElementById('sel').value
+        if (x == '0') {
+            document.getElementById('scores').style.display = 'none'
+        }
+        else {
+            document.getElementById('scores').style.display = ''
+            y = x.split(' vs ');
+            p1 = document.getElementById('p1')
+            p2 = document.getElementById('p2')
+            if (y[0].substr(y[0].length - 1) == 's') {
+                p1.innerHTML = y[0] + "' score"
+            }
+            else {
+                p1.innerHTML = y[0] + "'s score"
+            }
+            if (y[1].substr(y[1].length - 1) == 's') {
+                p2.innerHTML = y[1] + "' score"
+            }
+            else {
+                p2.innerHTML = y[1] + "'s score"
+            }
+        }
+    }
+</script>
