@@ -99,7 +99,7 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                     break
                 }
             }
-
+            console.log(x.matches)
             let width
             let height
             if (x.enrolled.length > 4) {
@@ -110,6 +110,7 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                 width = 1150
                 height = 620
             }
+
             tourneyModel.updateMatches(x.id)
             res.render("single-tournament", { tournament: searchResult, currentuser, height, width, showfinish })
         })
@@ -188,12 +189,23 @@ router.post("/createtourney", ensureAuthenticated, async (req, res) => {
                 name: title,
                 url: url,
                 tournamentType: type,
-                grand_finals_modifier: 'single match',
             },
             callback: (err, data) => {
                 //   console.log(err, data);
             }
         });
+        function cont() {
+            client.tournaments.update({
+                id: url,
+                tournament: {
+                    grand_finals_modifier: 'single match',
+                },
+                callback: (err, data) => {
+                    // console.log(err, data);
+                }
+            });
+        }
+        setTimeout(cont, 2000)
     }
     else {
         client.tournaments.create({
@@ -383,8 +395,13 @@ router.post("/addresult/:id", ensureAuthenticated, async (req, res) => {
     }
 })
 
-router.get('/finish/:id', async (req,res) => {
+router.get('/finish/:id', async (req, res) => {
     tourneyModel.finish(req.params.id)
+    res.redirect('/tournaments/' + req.params.id)
+})
+
+router.get('/start/:id', async (req, res) => {
+    tourneyModel.start(req.params.id)
     res.redirect('/tournaments/' + req.params.id)
 })
 

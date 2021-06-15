@@ -153,7 +153,23 @@ const tourneyModel = {
             //   console.log(err, data);
             }
           });
-    }
+    },
+    start: async (t_id) => {
+        client.tournaments.start({
+            id: t_id.replace(/-/g,'_'),
+            callback: (err, data) => {
+            //   console.log(err, data);
+            }
+          });
+          const update = await prisma.tournament.update({
+            where: {
+                id: t_id,
+            },
+            data: {
+                started: true,
+            },
+        })
+    },
 }
 
 module.exports = { database, tourneyModel }
