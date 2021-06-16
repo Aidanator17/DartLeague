@@ -10,7 +10,7 @@ const sendMail = require("../controllers/mailController").sendMail
 const { v4: uuidv4 } = require('uuid');
 
 router.get("/login", forwardAuthenticated, (req, res) => {
-  res.render("auth/login", { currentuser: {} })
+  res.render("auth/login", { currentuser: {}, login:0 })
 })
 
 router.post("/login", (req, res) => {
@@ -45,21 +45,21 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/register", forwardAuthenticated, (req, res) => {
-  res.render("auth/register", { currentuser: {} })
+  res.render("auth/register", { currentuser: {}, login:0 })
 })
 
 router.post("/register", async (req, res) => {
   if (req.body.fname == "" || req.body.lname == "") {
-    res.render("auth/error/register/name_empty", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {} })
+    res.render("auth/error/register/name_empty", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {}, login:0 })
   }
   else if (req.body.email == "") {
-    res.render("auth/error/register/email_empty", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {} })
+    res.render("auth/error/register/email_empty", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {}, login:0 })
   }
   else if (req.body.password == "") {
-    res.render("auth/error/register/pw_empty", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {} })
+    res.render("auth/error/register/pw_empty", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {}, login:0 })
   }
   else if (req.body.password !== req.body.passwordC) {
-    res.render("auth/error/register/confirm_pw", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {} })
+    res.render("auth/error/register/confirm_pw", { fname: req.body.fname, lname: req.body.lname, email: req.body.email, currentuser: {}, login:0 })
   }
   else {
     let uu = uuidv4();
@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
     if (cont) {
       console.log('pog!')
       await sendMail(req.body.email, 'https://robsonlinedarts.herokuapp.com/verify/id/'+uu, req.body.fname)
-      res.render("auth/verify", { currentuser: {}, email: req.body.email })
+      res.render("auth/verify", { currentuser: {}, email: req.body.email, login:0 })
     }
     else {
       console.log('Error!')
