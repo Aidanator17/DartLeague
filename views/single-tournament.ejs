@@ -1,57 +1,98 @@
+<div onload="load()">
 <h1>
     <%= tournament.title %>
 </h1>
 <p>
     <%= tournament.subtitle %>
 </p>
-<% if (tournament.started == false && tournament.active == true && currentuser.role=="admin"){ %>
-    <a href=<%="/start/"+tournament.id %> class="btn btn-info">Start</a>
-    <% } if (showfinish && tournament.active == true && tournament.started == true){ %>  
+<% if (tournament.started==false && tournament.active==true && currentuser.role=="admin" ){ %>
+    <a href=<%="/start/" +tournament.id %> class="btn btn-info">Start</a>
+    <% } if (showfinish && tournament.active==true && tournament.started==true){ %>
         <a href='<%= "/finish/"+tournament.id %>' class="btn btn-info">Finish</a>
         <% } %>
-<% let showbutton=true; for (person in tournament.enrolled){ if (tournament.enrolled[person]==currentuser.id){
-    showbutton=false }} %>
-    <% if (currentuser.role=="admin" ){ if (tournament.active==false){ %>
-        <a href=<%="/activate/" +tournament.id %> class="btn btn-info">Activate</a>
-        <% } if (tournament.active==true) {%>
-            <a href=<%="/deactivate/" +tournament.id %> class="btn btn-info">Deactivate</a>
-            <% let enr=false; for (i in tournament.enrolled) { if (tournament.enrolled[i]==currentuser.id){ enr=true } }
-                if (enr==true){ %>
-                <% } %>
-                    <% }  %> 
-                        
-                        <% } %>
-                    <% if (showbutton==false && tournament.started == true && showfinish==false){ %>
-                        <a href='<%= "/addresult/"+tournament.id %>' class="btn btn-info">Add Result</a>
-                        <% } %>
-                        <% if (tournament.archived==false){ if (showbutton==true){ if (tournament.active==true){ %>
-                            <a href='<%= "/enroll/"+tournament.id %>' class="btn btn-info">Enroll</a>
-                            <% }}} if (currentuser.role=="admin" ){ if (tournament.archived==false){ %>
-                                <a href='<%= "/archive/"+tournament.id %>' class="btn btn-info">Archive</a><br>
-                                <% } else { %>
-                                    <a href='<%= "/unarchive/"+tournament.id %>' class="btn btn-info">Unarchive</a><br>
-                                    <% }} %>
-                                <br>
-                                <div class="d-flex justify-content-center">
-                                    <div class="d-flex flex-column">
-                                    <div class="p-2">
-                                        <% if (tournament.enrolled.length<3){ %>
-                                            <p>Not enough players to show bracket! Enroll now!</p>
-                                            <% } else{ %>
-                                        <iframe
-                                            src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=1&theme=2"
-                                            width="<%= width %>" height="<%= height %>" frameborder="0" scrolling="auto"
-                                            allowtransparency="true"></iframe> <% } %>
-                                    </div>
-                                    <% if (tournament.enrolled.length>=3){ %>
-                                    <div class="p-2">
-                                        <h3>Match History</h3>
-                                        <% for (i in tournament.history) { %>
-                                            <p>
-                                            </p>
-                                            <% } if (tournament.history.length==0){ %>
-                                                <p>No matches have been played yet</p>
-                                                <% } %>
-                                    </div>
-                                    <% } %>
-                                </div></div>
+            <% let showbutton=true; for (person in tournament.enrolled){ if
+                (tournament.enrolled[person]==currentuser.id){ showbutton=false }} %>
+                <% if (currentuser.role=="admin" ){ if (tournament.active==false){ %>
+                    <a href=<%="/activate/" +tournament.id %> class="btn btn-info">Activate</a>
+                    <% } if (tournament.active==true) {%>
+                        <a href=<%="/deactivate/" +tournament.id %> class="btn btn-info">Deactivate</a>
+                        <% let enr=false; for (i in tournament.enrolled) { if (tournament.enrolled[i]==currentuser.id){
+                            enr=true } } if (enr==true){ %>
+                                <% } %>
+                                <% } %>
+                                
+                                <% } %>
+                                <% if (showbutton==false && tournament.started==true && showfinish==false){ %>
+                                    <a href='<%= "/addresult/"+tournament.id %>' class="btn btn-info">Add
+                                        Result</a>
+                                        <% } %>
+                                        <% if (tournament.archived==false){ if (showbutton==true){ if
+                                            (tournament.active==true){ %>
+                                                <a href='<%= "/enroll/"+tournament.id %>'
+                                                    class="btn btn-info">Enroll</a>
+                                                    <% }}} if (currentuser.role=="admin" ){ if
+                                                        (tournament.archived==false){ %>
+                                                            <a href='<%= "/archive/"+tournament.id %>'
+                                                                class="btn btn-info">Archive</a><br>
+                                                                <% } else { %>
+                                                                    <a href='<%= "/unarchive/"+tournament.id %>'
+                                                                        class="btn btn-info">Unarchive</a><br>
+                                                                        <% }} %>
+                                                                        <br>
+                                                                        <div class="phone">
+                                                                            <div class="d-flex justify-content-center" id='rclass'>
+                                                                                <div class="d-flex flex-column">
+                                                                                    <div class="p-2">
+                                                                                        <% if (tournament.enrolled.length<3){ %>
+                                                                                            <p>Not enough players to show
+                                                                                                bracket!
+                                                                                                Enroll now!</p>
+                                                                                                <% } else{ %>
+                                                                                                    <iframe id='desktop'
+                                                                                                    src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=1&theme=2"
+                                                                                                    width="<%= width %>"
+                                                                                                    height="<%= height %>"
+                                                                                                    frameborder="0"
+                                                                                                    scrolling="auto"
+                                                                                                    allowtransparency="true"></iframe>
+                                                                                                    <iframe id='phone' style="display: none;"
+                                                                                                    src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=1&theme=2"
+                                                                                                    width="370"
+                                                                                                    height="500"
+                                                                                                    frameborder="0"
+                                                                                                    scrolling="auto"
+                                                                                                    allowtransparency="true"></iframe>
+                                                                                                    <% } %>
+                                                                                                    </div>
+                                                                                                    <% if (tournament.enrolled.length>=3){ %>
+                                                                                                        <div class="p-2">
+                                                                                                            <h3>Match History</h3>
+                                                                                                            <% for (i in tournament.history) {
+                                                                                                                %>
+                                                                                                                <p>
+                                                                                                                    </p>
+                                                                                                                    <% } if
+                                                                                                                    (tournament.history.length==0){
+                                                                                                                        %>
+                                                                                                                        <p>No matches have been
+                                                                                                                            played
+                                                                                                                            yet</p>
+                                                                                                                            <% } %>
+                                                                                                                            </div>
+                                                                                                                            <% } %>
+                                                                                                                            </div>
+                                                                                                                            </div>
+                                                                                                                            </div></div>
+<script>
+    function load(){
+    if (991>=window.innerWidth>=375){
+        let x = document.getElementById('desktop')
+        let y = document.getElementById('phome')
+        x.style.display = 'none;'
+        y.style.display = ''
+        let classes = document.getElementById('rclass').className
+        classes.replace(' justify-content-center','')
+        document.getElementById('rclass').className = classes
+        console.log(document.getElementById('rclass').className)
+    }}
+</script>

@@ -98,10 +98,13 @@ const tourneyModel = {
                 // console.log(err, data);
                 let people = {}
                 
-                for (person in data) {
+                try {for (person in data) {
                     people[person] = {}
                     people[person]['name'] = data[person].participant.displayName
                     people[person]['id'] = data[person].participant.id
+                }}
+                catch {
+                    console.log(data)
                 }
                 // console.log("PEOPLE:", people)
                 client.matches.index({

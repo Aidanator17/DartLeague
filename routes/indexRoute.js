@@ -110,8 +110,8 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                 width = 1150
                 height = 620
             }
-
-            tourneyModel.updateMatches(x.id)
+            if (x.started == true){
+            tourneyModel.updateMatches(x.id)}
             res.render("single-tournament", { tournament: searchResult, currentuser, height, width, showfinish })
         })
     })

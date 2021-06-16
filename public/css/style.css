@@ -104,6 +104,9 @@ ul.matchup li {
         display: grid;
         grid-template-columns: auto;
     }
+    .phone {
+        width: 5vw;
+    }
 }
 
 @media screen and (max-width: 400px) {
