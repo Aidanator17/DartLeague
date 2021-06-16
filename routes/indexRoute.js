@@ -9,7 +9,7 @@ const fetch = require('node-fetch');
 const { v4: uuidv4 } = require('uuid');
 const challonge = require('challonge');
 let sites = ['https://robsonlinedarts.herokuapp.com', 'http://localhost:8000']
-let sitenum = 1
+let sitenum = 0
 const client = challonge.createClient({
     apiKey: 'Sks8NJLfTCQAO1c47e6Y4Mbh0Gj1bqHzpiCx1QoZ'
 });

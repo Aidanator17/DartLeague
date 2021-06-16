@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const { database } = require("../models/userDatabase");
 const { transformDocument } = require("@prisma/client/runtime");
 let sites = ['https://robsonlinedarts.herokuapp.com', 'http://localhost:8000']
-let sitenum = 1
+let sitenum = 0
 
 router.get("/usersdb", async (req, res) => {
 

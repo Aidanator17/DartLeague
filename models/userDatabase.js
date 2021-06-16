@@ -26,13 +26,13 @@ let sites = ['https://robsonlinedarts.herokuapp.com', 'http://localhost:8000']
 //     }]
 
 var database = []
-request(sites[1] + '/db/usersdb', function (error, response, body) {
+request(sites[0] + '/db/usersdb', function (error, response, body) {
   database.push(JSON.parse(body))
 })
 
 const userModel = {
   findOne: (email) => {
-    request(sites[1] + '/db/usersdb', function (error, response, body) {
+    request(sites[0] + '/db/usersdb', function (error, response, body) {
       database[0] = JSON.parse(body)
     })
     //   console.log("users:",database)
@@ -43,7 +43,7 @@ const userModel = {
     return new Error(`Couldn't find user with email: ${email}`);
   },
   findById: (id) => {
-    request(sites[1] + '/db/usersdb', function (error, response, body) {
+    request(sites[0] + '/db/usersdb', function (error, response, body) {
       database[0] = JSON.parse(body)
     })
     const user = database[0].find((user) => user.id === id);
@@ -53,7 +53,7 @@ const userModel = {
     throw new Error(`Couldn't find user with id: ${id}`);
   },
   OUTSIDEfindById: (id) => {
-    request(sites[1] + '/db/usersdb', function (error, response, body) {
+    request(sites[0] + '/db/usersdb', function (error, response, body) {
       database[0] = JSON.parse(body)
     })
     const user = database[0].find((user) => user.id === id);
@@ -80,7 +80,7 @@ const userModel = {
   },
   enroll: async (t_id, currentuser) => {
 
-    request(sites[1] + '/db/usersdb', function (error, response, body) {
+    request(sites[0] + '/db/usersdb', function (error, response, body) {
       database[0] = JSON.parse(body)
     })
 

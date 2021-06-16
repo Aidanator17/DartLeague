@@ -7,7 +7,7 @@ let userModel = require("../models/userDatabase").userModel
 let tourneyModel = require("../models/tourneyDatabase").tourneyModel
 const fetch = require('node-fetch');
 let sites = ['https://robsonlinedarts.herokuapp.com', 'http://localhost:8000']
-let sitenum = 1
+let sitenum = 0
 
 router.get("/id/:id", (req, res) => {
     fetch(sites[sitenum] + '/db/usersdb').then(function (res) {

@@ -7,10 +7,10 @@ const request = require('request');
 const fetch = require('node-fetch');
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
-let sitenum = 1
+let sitenum = 0
 
 var database = []
-request(sites[1] + '/db/tourneydb', function (error, response, body) {
+request(sites[0] + '/db/tourneydb', function (error, response, body) {
     database.push(JSON.parse(body))
 })
 
