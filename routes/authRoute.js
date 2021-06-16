@@ -5,8 +5,7 @@ const router = express.Router();
 const userModel = require("../models/userDatabase").userModel
 const getUserByEmailIdAndPassword = require("../controllers/userController").getUserByEmailIdAndPassword
 const sgMail = require('@sendgrid/mail')
-var config = require("../config")
-sgMail.setApiKey(config.SENDGRID_API_KEY)
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const sendMail = require("../controllers/mailController").sendMail
 const { v4: uuidv4 } = require('uuid');
 
