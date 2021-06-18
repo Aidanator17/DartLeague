@@ -7,7 +7,7 @@
 </p>
 <% if (tournament.started==false && tournament.active==true && currentuser.role=="admin" ){ %>
     <a href=<%="/start/" +tournament.id %> class="btn btn-info">Start</a>
-    <% } if (showfinish && tournament.active==true && tournament.started==true){ %>
+    <% } if (showfinish && tournament.active==true && tournament.started==true && currentuser.role=="admin" ){ %>
         <a href='<%= "/finish/"+tournament.id %>' class="btn btn-info">Finish</a>
         <% } %>
             <% let showbutton=true; for (person in tournament.enrolled){ if
