@@ -391,7 +391,10 @@ router.post("/addresult/:id", ensureAuthenticated, async (req, res) => {
             }
         });
 
-        res.redirect('/tournaments/' + req.params.id)
+        function red() {
+            res.redirect("/tournaments/" + req.params.id)
+        }
+        setTimeout(red, 1000)
     }
 })
 

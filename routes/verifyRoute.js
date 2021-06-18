@@ -25,7 +25,10 @@ router.get("/id/:id", (req, res) => {
 })
 
 router.get("/complete", (req,res)=>{
-    res.render("auth/verifycomplete", {currentuser: {}})
+    function red() {
+        res.render("auth/verifycomplete", {currentuser: {}})
+    }
+    setTimeout(red, 2000)
 })
 
 module.exports = router
