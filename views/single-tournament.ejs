@@ -26,7 +26,7 @@
                                     <a href='<%= "/addresult/"+tournament.id %>' class="btn btn-info">Add
                                         Result</a>
                                         <% } %>
-                                        <% if (tournament.archived==false){ if (showbutton==true){ if
+                                        <% if (tournament.archived==false && tournament.started==false){ if (showbutton==true){ if
                                             (tournament.active==true){ %>
                                                 <a href='<%= "/enroll/"+tournament.id %>'
                                                     class="btn btn-info">Enroll</a>
