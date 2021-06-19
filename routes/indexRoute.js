@@ -110,8 +110,9 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                 width = 1150
                 height = 620
             }
-            if (x.started == true){
-            tourneyModel.updateMatches(x.id)}
+            if (x.started == true) {
+                tourneyModel.updateMatches(x.id)
+            }
             res.render("single-tournament", { tournament: searchResult, currentuser, height, width, showfinish })
         })
     })
@@ -407,5 +408,69 @@ router.get('/start/:id', async (req, res) => {
     tourneyModel.start(req.params.id)
     res.redirect('/tournaments/' + req.params.id)
 })
+
+router.get('/sessions', ensureAuthenticated, async (req, res) => {
+
+    if (req.user.role == 'admin') {
+
+        await fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
+            return res.text();
+        }).then(function (body) {
+            users[0] = JSON.parse(body)
+        })
+        const store = req.sessionStore;
+
+        store.all((error, sessions) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(sessions);
+                res.render('sessionview', {
+                    currentuser: req.user,
+                    sessions,
+                    database: users[0]
+                });
+            }
+        });
+    }
+    else {
+        res.redirect('/home')
+    }
+})
+
+router.get("/revoke", (req, res) => {
+    const store = req.sessionStore;
+    let sid = req.query.sid
+    store.destroy(sid, (error) => {
+        if (error) {
+            console.log(error);
+        }
+    });
+    res.redirect("/sessions");
+});
+
+router.get('/tourneydelete/:id', ensureAuthenticated, async (req, res) => {
+    await fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        users[0] = JSON.parse(body)
+    })
+    tourneyModel.delete(req.params.id)
+    userModel.removeEnrolled(users[0],req.params.id)
+    function red() {
+        res.redirect("/tournaments")
+    }
+    setTimeout(red, 1500)
+})
+
+async function l(){
+    await fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
+        return res.text();
+    }).then(function (body) {
+        users[0] = JSON.parse(body)
+    })
+    userModel.removeEnrolled(users[0],'731d961c-c0e2-4db8-8128-07afb5c6bb28')
+}
+l()
 
 module.exports = router

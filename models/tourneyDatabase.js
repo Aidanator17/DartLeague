@@ -173,6 +173,22 @@ const tourneyModel = {
             },
         })
     },
+    delete: async (t_id) => {
+        const deleteTournament = await prisma.tournament.delete({
+            where: {
+              id: t_id,
+            },
+          })
+
+
+
+        client.tournaments.destroy({
+            id: t_id.replace(/-/g,'_'),
+            callback: (err, data) => {
+              console.log(err, data);
+            }
+          });
+    }
 }
 
 module.exports = { database, tourneyModel }

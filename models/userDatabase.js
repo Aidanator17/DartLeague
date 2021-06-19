@@ -125,6 +125,23 @@ const userModel = {
         verified: true,
       },
     })
+  },
+  removeEnrolled: async (users, t_id) =>{
+    for (user in users){
+      for (t in users[user].enrolledin){
+        if (users[user].enrolledin[t] == t_id){
+          users[user].enrolledin.splice(users[user].enrolledin[t])
+          const update = await prisma.user.update({
+            where: {
+              id: users[user].id,
+            },
+            data: {
+              enrolledin: users[user].enrolledin,
+            },
+          })
+        }
+      }
+    }
   }
 };
 module.exports = { userModel, database }

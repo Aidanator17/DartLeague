@@ -1,0 +1,29 @@
+<h2>Sessions</h2>
+
+<% console.log(sessions);for (i in sessions){ %>
+    <p>SessionID: <%= i %><br>
+            UserID: <%= sessions[i]['passport']['user'] %><br>
+                Name: <% for (a in database){ if (database[a].id==sessions[i]['passport']['user']){ %>
+                    <%= database[a].FName %> <%= database[a].LName %>
+                        <% }} %><br>
+                            Role: <% for (a in database){ if (database[a]['id']==sessions[i]['passport']['user']){ if
+                                (database[a]['role']=='user' ){ %> <span style="color: green">
+                                    <%= database[a]['role'] %>
+                                </span>
+                                <% }else if (database[a]['role']=='superadmin' ){ %> <span style="color: purple">
+                                        <%= database[a]['role'] %>
+                                    </span>
+                                    <% }else{ %><span style="color: blue">
+                                            <%= database[a]['role'] %>
+                                        </span>
+                                        <%}}} %>
+                                            <% let revokelink='/revoke?sid=' +i%>
+                                                <br>
+                                                LoginMethod: <% for (a in database){ if
+                                                    (database[a]['id']==sessions[i]['passport']['user']){ %>
+                                                    <%= database[a]['method'] %>
+                                                        <% }} %><br>
+                                                            <a href="<%= revokelink %>" class="btn btn-primary"
+                                                                role="button">Revoke Session</a>
+    </p><br>
+    <%}%>
