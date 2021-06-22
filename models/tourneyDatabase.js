@@ -5,7 +5,8 @@ const client = challonge.createClient({
 });
 const request = require('request');
 const fetch = require('node-fetch');
-const { PrismaClient } = require('@prisma/client')
+const { PrismaClient } = require('@prisma/client');
+const { json } = require('express');
 const prisma = new PrismaClient()
 let sitenum = 0
 
@@ -97,12 +98,14 @@ const tourneyModel = {
             callback: (err, data) => {
                 // console.log(err, data);
                 let people = {}
-                
-                try {for (person in data) {
-                    people[person] = {}
-                    people[person]['name'] = data[person].participant.displayName
-                    people[person]['id'] = data[person].participant.id
-                }}
+
+                try {
+                    for (person in data) {
+                        people[person] = {}
+                        people[person]['name'] = data[person].participant.displayName
+                        people[person]['id'] = data[person].participant.id
+                    }
+                }
                 catch {
                     console.log(data)
                 }
@@ -131,9 +134,14 @@ const tourneyModel = {
                                 }
                             }
                         }
+                        let removal = 0
                         for (i in match) {
-                            match[i]['title'] = String(match[i].player1name+" vs "+match[i].player2name)
+                            match[i]['title'] = String(match[i].player1name + " vs " + match[i].player2name)
+                            if (parseInt(i)>removal){
+                                removal = i
+                            }
                         }
+                        delete match[removal]
                         // console.log("MATCHES:", match)
                         const update = await prisma.tournament.update({
                             where: {
@@ -151,20 +159,23 @@ const tourneyModel = {
     },
     finish: async (t_id) => {
         client.tournaments.finalize({
-            id: t_id.replace(/-/g,'_'),
+            id: t_id.replace(/-/g, '_'),
             callback: (err, data) => {
-            //   console.log(err, data);
+                //   console.log(err, data);
             }
-          });
+        });
     },
     start: async (t_id) => {
-        client.tournaments.start({
-            id: t_id.replace(/-/g,'_'),
+        client.participants.randomize({
+            id: t_id.replace(/-/g, '_'),
             callback: (err, data) => {
-            //   console.log(err, data);
+                client.tournaments.start({
+                    id: t_id.replace(/-/g, '_'),
+                    callback: (err, data) => { }
+                });
             }
-          });
-          const update = await prisma.tournament.update({
+        });
+        const update = await prisma.tournament.update({
             where: {
                 id: t_id,
             },
@@ -176,18 +187,18 @@ const tourneyModel = {
     delete: async (t_id) => {
         const deleteTournament = await prisma.tournament.delete({
             where: {
-              id: t_id,
+                id: t_id,
             },
-          })
+        })
 
 
 
         client.tournaments.destroy({
-            id: t_id.replace(/-/g,'_'),
+            id: t_id.replace(/-/g, '_'),
             callback: (err, data) => {
-              console.log(err, data);
+                console.log(err, data);
             }
-          });
+        });
     }
 }
 

@@ -99,7 +99,6 @@ router.get("/tournaments/:id", ensureAuthenticated, (req, res) => {
                     break
                 }
             }
-            console.log(x.matches)
             let width
             let height
             if (x.enrolled.length > 4) {
@@ -184,31 +183,7 @@ router.post("/createtourney", ensureAuthenticated, async (req, res) => {
 
     await tourneyModel.create(id, fullurl, title, subtitle, active, archived, type, history, enrolled)
 
-    if (req.body.type == 'double elimination') {
-        client.tournaments.create({
-            tournament: {
-                name: title,
-                url: url,
-                tournamentType: type,
-            },
-            callback: (err, data) => {
-                //   console.log(err, data);
-            }
-        });
-        function cont() {
-            client.tournaments.update({
-                id: url,
-                tournament: {
-                    grand_finals_modifier: 'single match',
-                },
-                callback: (err, data) => {
-                    // console.log(err, data);
-                }
-            });
-        }
-        setTimeout(cont, 2000)
-    }
-    else {
+    function cont() {
         client.tournaments.create({
             tournament: {
                 name: title,
@@ -220,6 +195,7 @@ router.post("/createtourney", ensureAuthenticated, async (req, res) => {
             }
         });
     }
+    setTimeout(cont, 2000)
 
     res.redirect("/tournaments")
 })
@@ -456,21 +432,11 @@ router.get('/tourneydelete/:id', ensureAuthenticated, async (req, res) => {
         users[0] = JSON.parse(body)
     })
     tourneyModel.delete(req.params.id)
-    userModel.removeEnrolled(users[0],req.params.id)
+    userModel.removeEnrolled(users[0], req.params.id)
     function red() {
         res.redirect("/tournaments")
     }
     setTimeout(red, 1500)
 })
-
-async function l(){
-    await fetch(sites[sitenum] + '/db/usersdb').then(function (res) {
-        return res.text();
-    }).then(function (body) {
-        users[0] = JSON.parse(body)
-    })
-    userModel.removeEnrolled(users[0],'731d961c-c0e2-4db8-8128-07afb5c6bb28')
-}
-l()
 
 module.exports = router
