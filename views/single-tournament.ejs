@@ -1,4 +1,4 @@
-<div onload="load()">
+<div onload="load()" id='god'>
     <h1>
         <%= tournament.title %>
     </h1>
@@ -43,7 +43,7 @@
                                                                     <div class="phone">
                                                                         <div class="d-flex justify-content-center"
                                                                             id='rclass'>
-                                                                            <div class="d-flex flex-column">
+                                                                            <div class="d-flex flex-column" id='parent'>
                                                                                 <div class="p-2">
                                                                                     <% if
                                                                                         (tournament.enrolled.length<3){
@@ -52,24 +52,29 @@
                                                                                             bracket!
                                                                                             Enroll now!</p>
                                                                                         <% } else{ %>
-                                                                                            <% if (tournament.started == false){ %>
-                                                                                                <p>(seeds will be randomized upon the start of a tournament)</p>
+                                                                                            <% if
+                                                                                                (tournament.started==false){
+                                                                                                %>
+                                                                                                <p>(seeds will be
+                                                                                                    randomized upon the
+                                                                                                    start of a
+                                                                                                    tournament)</p>
                                                                                                 <% } %>
-                                                                                            <iframe id='desktop'
-                                                                                                src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=1&theme=2"
-                                                                                                width="<%= width %>"
-                                                                                                height="<%= height %>"
-                                                                                                frameborder="0"
-                                                                                                scrolling="auto"
-                                                                                                allowtransparency="true"></iframe>
-                                                                                            <iframe id='phone'
-                                                                                                style="display: none;"
-                                                                                                src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=1&theme=2"
-                                                                                                width="370" height="500"
-                                                                                                frameborder="0"
-                                                                                                scrolling="auto"
-                                                                                                allowtransparency="true"></iframe>
-                                                                                            <% } %>
+                                                                                                    <iframe id='desktop'
+                                                                                                        src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=1&theme=2"
+                                                                                                        width="<%= width %>"
+                                                                                                        height="<%= height %>"
+                                                                                                        frameborder="0"
+                                                                                                        scrolling="auto"
+                                                                                                        allowtransparency="true"></iframe>
+                                                                                                    <iframe id='phone'
+                                                                                                        style="display: none;"
+                                                                                                        src="<%= tournament.url %>/module?show_tournament_name=1&show_standings=1&show_final_results=1&scale_to_fit=0&theme=2"
+                                                                                                        height="500"
+                                                                                                        frameborder="0"
+                                                                                                        scrolling="auto"
+                                                                                                        allowtransparency="true"></iframe>
+                                                                                                    <% } %>
                                                                                 </div>
                                                                                 <% if (tournament.enrolled.length>=3){
                                                                                     %>
@@ -97,16 +102,20 @@
         style="color: white;">Delete</a>
     <% } %>
         <script>
-            function load() {
-                if (991 >= window.innerWidth >= 375) {
-                    let x = document.getElementById('desktop')
-                    let y = document.getElementById('phome')
-                    x.style.display = 'none;'
-                    y.style.display = ''
-                    let classes = document.getElementById('rclass').className
-                    classes.replace(' justify-content-center', '')
-                    document.getElementById('rclass').className = classes
-                    console.log(document.getElementById('rclass').className)
-                }
+            console.log(window.innerWidth)
+            if (991 >= window.innerWidth && window.innerWidth >= 375) {
+                console.log('lol')
+                let x = document.getElementById('desktop')
+                let y = document.getElementById('phone')
+                let god = document.getElementById('god')
+                let p = document.getElementById('parent')
+                y.width = window.innerWidth-30
+                x.style.display = "none";
+                y.style.display = ''
+                p.style.paddingLeft = String(window.innerWidth*.85)+'px'
+                let classes = document.getElementById('rclass').className
+                classes.replace(' justify-content-center', '')
+                // document.getElementById('rclass').className = classes
+                console.log(y.width)
             }
         </script>
